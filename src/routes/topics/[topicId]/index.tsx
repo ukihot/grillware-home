@@ -1,16 +1,21 @@
 import { component$ } from '@builder.io/qwik'
 import { routeLoader$ } from '@builder.io/qwik-city'
-import { Blog } from '~/lib/microcms'
+import { getDetail } from '~/lib/microcms'
 
-export const useProductDetails = routeLoader$(async (requestEvent) => {
-    const res = await fetch(
-        `https://grillware.microcms.io/api/v1/blogs/filters=category[equals]${encodeURIComponent(requestEvent.params.topicId)}`
-    )
-    const blog = await res.json()
-    return blog as Blog
+// Load blog details based on topicId
+export const useBlogDetails = routeLoader$(async (requestEvent) => {
+    const { topicId } = requestEvent.params
+    const blog = await getDetail(topicId)
+    return blog
 })
 
 export default component$(() => {
-    const signal = useProductDetails()
-    return <p>Product name: {signal.value.title}</p>
+    const signal = useBlogDetails()
+
+    return (
+        <div class="content-item">
+            <h1>{signal.value.title}</h1>
+            <div dangerouslySetInnerHTML={signal.value.description}></div>
+        </div>
+    )
 })

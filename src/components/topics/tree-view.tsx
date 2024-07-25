@@ -1,21 +1,26 @@
 import { component$ } from '@builder.io/qwik'
 import { Blog } from '~/lib/microcms'
+import { NavLink } from '../navlink'
 
-export const TreeView = component$(({ data }: { data: Blog[] }) => {
-    // Convert the blog data into a nested list structure.
-    // This example assumes a flat structure; adjust based on actual data.
-    const buildTree = (blogs: Blog[]) => {
+export const TreeView = component$(({ data }: { data: Blog[] | null }) => {
+    const buildTree = (blogs: Blog[] | null) => {
+        if (!blogs) {
+            return <p>Loading...</p>
+        }
         if (blogs.length === 0) {
             return <p>No blogs available</p>
         }
 
-        // Assuming a flat structure; adjust if nested data is used
         return (
             <ul class="tree-view">
                 {blogs.map((blog) => (
                     <li key={blog.id}>
-                        {blog.publishedAt}
-                        {blog.title}
+                        <NavLink
+                            href={`/topics/${blog.id}`}
+                            activeClass="active" // Optional: apply an active class if needed
+                        >
+                            {blog.publishedAt} - {blog.title}
+                        </NavLink>
                     </li>
                 ))}
             </ul>

@@ -16,7 +16,7 @@ export default component$(() => {
         blogs: Blog[] | null
     }>({
         categories: categoriesSignal.value,
-        selectedCategory: categoriesSignal.value[0],
+        selectedCategory: null,
         blogs: null,
     })
 
@@ -27,56 +27,41 @@ export default component$(() => {
         return contents
     })
 
-    // 初回レンダリング時にブログを取得
+    // 初回レンダリング時にselectedCategoryを設定し、ブログを取得
     useTask$(async () => {
-        if (state.selectedCategory) {
-            await fetchBlogs(state.selectedCategory).then(async (blogs) => {
-                state.blogs = blogs
-            })
+        if (state.categories && state.categories.length > 0) {
+            state.selectedCategory = state.categories[0]
+            state.blogs = await fetchBlogs(state.selectedCategory)
         }
     })
 
-    // タブ切り替え時にブログを取得
-    useTask$(async ({ track }) => {
-        track(() => state.selectedCategory)
-
-        if (state.selectedCategory) {
-            await fetchBlogs(state.selectedCategory).then(async (blogs) => {
-                state.blogs = blogs
-            })
-        }
+    // タブ切り替え時の即時UI更新と非同期データ取得
+    const handleTabClick = $(async (category: Category) => {
+        state.selectedCategory = category
+        state.blogs = await fetchBlogs(category)
     })
 
     return (
         <>
-            {state.categories ? (
-                <>
-                    <menu role="tablist">
-                        {state.categories.map((category) => (
-                            <li
-                                key={category.name}
-                                role="tab"
-                                aria-selected={
-                                    state.selectedCategory?.name ===
-                                    category.name
-                                }
-                                onClick$={() => {
-                                    state.selectedCategory = category
-                                }}
-                            >
-                                <a href="#tabs">{category.name}</a>
-                            </li>
-                        ))}
-                    </menu>
-                    <div class="window" role="tabpanel">
-                        <div class="window-body">
-                            {state.blogs && <TreeView data={state.blogs} />}
-                        </div>
-                    </div>
-                </>
-            ) : (
-                <p>Loading...</p>
-            )}
+            <menu role="tablist">
+                {state.categories?.map((category) => (
+                    <li
+                        key={category.name}
+                        role="tab"
+                        aria-selected={
+                            state.selectedCategory?.name === category.name
+                        }
+                        onClick$={() => handleTabClick(category)}
+                    >
+                        <a href="#tabs">{category.name}</a>
+                    </li>
+                ))}
+            </menu>
+            <div class="window" role="tabpanel">
+                <div class="window-body">
+                    <TreeView data={state.blogs} />
+                </div>
+            </div>
         </>
     )
 })
