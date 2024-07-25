@@ -37,7 +37,7 @@ export default component$(() => {
     })
 
     // タブ切り替え時にブログを取得
-    useTask$(async({ track }) => {
+    useTask$(async ({ track }) => {
         track(() => state.selectedCategory)
 
         if (state.selectedCategory) {
