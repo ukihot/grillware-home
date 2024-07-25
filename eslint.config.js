@@ -1,0 +1,63 @@
+import qwikPlugin from 'eslint-plugin-qwik'
+import typescriptParser from '@typescript-eslint/parser'
+
+export default [
+    {
+        files: ['src/**/*.tsx'],
+        languageOptions: {
+            parser: typescriptParser,
+            parserOptions: {
+                project: ['./tsconfig.json'],
+            },
+        },
+        plugins: {
+            qwik: qwikPlugin,
+        },
+        rules: {
+            ...qwikPlugin.configs.recommended.rules,
+            'qwik/jsx-no-script-url': 'off',
+        },
+        ignores: [
+            '**/*.log',
+            '**/.DS_Store',
+            '*.',
+            '.vscode/settings.json',
+            '.history',
+            '.yarn',
+            'bazel-*',
+            'bazel-bin',
+            'bazel-out',
+            'bazel-qwik',
+            'bazel-testlogs',
+            'dist',
+            'dist-dev',
+            'lib',
+            'lib-types',
+            'etc',
+            'external',
+            'node_modules',
+            'temp',
+            'tsc-out',
+            'tsdoc-metadata.json',
+            'target',
+            'output',
+            'rollup.config.js',
+            'build',
+            '.cache',
+            '.vscode',
+            '.rollup.cache',
+            'dist',
+            'tsconfig.tsbuildinfo',
+            'vite.config.ts',
+            '*.spec.tsx',
+            '*.spec.ts',
+            '.netlify',
+            'pnpm-lock.yaml',
+            'package-lock.json',
+            'yarn.lock',
+            'server',
+            'src/styled-system',
+            'panda.config.ts',
+        ],
+    },
+]
