@@ -21,6 +21,11 @@ export const WindowComponent = component$<WindowComponentProps>(
                 <div class="window-body">
                     <p>{body}</p>
                 </div>
+                <div class="status-bar">
+                    <p class="status-bar-field">Press F1 for help</p>
+                    <p class="status-bar-field">Slide 1</p>
+                    <p class="status-bar-field">CPU Usage: 14%</p>
+                </div>
             </div>
         )
     }

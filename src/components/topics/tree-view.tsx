@@ -15,9 +15,7 @@ export const TreeView = component$(({ data }: { data: Blog[] | null }) => {
             <ul class="tree-view">
                 {blogs.map((blog) => (
                     <li key={blog.id}>
-                        <Link
-                            href={`/topics/${blog.id}`}
-                        >
+                        <Link href={`/topics/${blog.id}`}>
                             {blog.publishedAt} - {blog.title}
                         </Link>
                     </li>
