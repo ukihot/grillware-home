@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik'
+import { Link } from '@builder.io/qwik-city'
 import { Blog } from '~/lib/microcms'
-import { NavLink } from '../navlink'
 
 export const TreeView = component$(({ data }: { data: Blog[] | null }) => {
     const buildTree = (blogs: Blog[] | null) => {
@@ -15,12 +15,11 @@ export const TreeView = component$(({ data }: { data: Blog[] | null }) => {
             <ul class="tree-view">
                 {blogs.map((blog) => (
                     <li key={blog.id}>
-                        <NavLink
+                        <Link
                             href={`/topics/${blog.id}`}
-                            activeClass="active" // Optional: apply an active class if needed
                         >
                             {blog.publishedAt} - {blog.title}
-                        </NavLink>
+                        </Link>
                     </li>
                 ))}
             </ul>

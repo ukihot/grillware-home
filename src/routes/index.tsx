@@ -1,39 +1,18 @@
-import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city'
-import { component$, useStore, useTask$ } from '@builder.io/qwik'
-import { Content } from '~/components/topics/content'
-import { getBlog, Blog } from '~/lib/microcms'
-
-export const useListLoader = routeLoader$(async () => {
-    const { contents } = await getBlog()
-    return contents
-})
+import { DocumentHead } from '@builder.io/qwik-city'
+import { component$ } from '@builder.io/qwik'
+import { WindowComponent } from '~/components/window'
 
 export default component$(() => {
-    const listLoader = useListLoader()
-    const state = useStore<{ data: Blog[] | null }>({ data: null })
-
-    // Update data when listLoader changes
-    useTask$(() => {
-        state.data = listLoader.value || null
-    })
-
     return (
-        <div>
-            {state.data ? (
-                <div class="topic-panel">
-                    {state.data.map((item) => (
-                        <Content key={item.id} data={item} />
-                    ))}
-                </div>
-            ) : (
-                <p>Loading...</p>
-            )}
-        </div>
+        <WindowComponent
+            title={'Hello'}
+            body={'Welcome to Grillware! We are delighted to have you here.'}
+        />
     )
 })
 
 export const head: DocumentHead = {
-    title: 'Welcome to Qwik',
+    title: 'Grillware',
     meta: [
         {
             name: 'description',
